@@ -1,0 +1,49 @@
+from collections import deque
+
+# Funcția BFS care găsește drumul minim în labirint
+def bfs(grid, start, stop):
+    rows, cols &#x3D; len(grid), len(grid[0])
+
+    # Vectori de direcție: jos, dreapta, sus, stânga
+    di &#x3D; [1, 0, -1, 0]
+    dj &#x3D; [0, 1, 0, -1]
+
+    queue &#x3D; deque()
+    iStart, jStart &#x3D; start
+    iStop, jStop &#x3D; stop
+
+    # Marchez poziția de start cu distanța 1
+    grid[iStart][jStart] &#x3D; 1
+    queue.append((iStart, jStart))
+
+    while queue:
+        i, j &#x3D; queue.popleft()
+
+        # Verificăm cei 4 vecini
+        for k in range(4):
+            ni, nj &#x3D; i + di[k], j + dj[k]
+
+            # Verificăm dacă vecinul este valid și liber
+            if 0 &lt;&#x3D; ni &lt; rows and 0 &lt;&#x3D; nj &lt; cols and grid[ni][nj] &#x3D;&#x3D; 0:
+                grid[ni][nj] &#x3D; grid[i][j] + 1  # Actualizăm distanța
+                queue.append((ni, nj))         # Adăugăm în coadă
+
+                # Dacă am ajuns la destinație, ieșim
+                if (ni, nj) &#x3D;&#x3D; (iStop, jStop):
+                    return
+
+# Inițializare labirint: 0 &#x3D; liber, -1 &#x3D; obstacol
+grid &#x3D; [
+    [0, 0, 0, -1, -1, 0, 0, 0, -1, 0],
+    [-1, -1, 0, -1, 0, -1, 0, 0, 0, -1],
+    [-1, 0, 0, 0, 0, 0, 0, -1, -1, 0],
+    [-1, -1, -1, 0, -1, -1, -1, 0, -1, 0],
+    [-1, 0, 0, -1, -1, 0, -1, 0, 0, 0],
+    [-1, 0, 0, -1, -1, 0, 0, 0, 0, 0]
+]
+
+start &#x3D; (0, 0)
+stop &#x3D; (1, 8)
+
+bfs(grid, start, stop)
+print(grid[stop[0]][stop[1]])  # Afișează distanța de la start la stop

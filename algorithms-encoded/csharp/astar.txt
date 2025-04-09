@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+
+class Program {
+    &#x2F;&#x2F; Calculează distanța Manhattan dintre două puncte
+    static int DistantaManhattan(int iPoz, int jPoz, int iStop, int jStop) {
+        return Math.Abs(iPoz - iStop) + Math.Abs(jPoz - jStop);
+    }
+
+    &#x2F;&#x2F; Funcția ASTAR pentru a găsi cel mai scurt drum într-un labirint
+    static void AStar(int[,] matrice, int iStart, int jStart, int iStop, int jStop) {
+        &#x2F;&#x2F; Vectori de direcție: jos, dreapta, sus, stânga
+        int[] di &#x3D; { 1, 0, -1, 0 };
+        int[] dj &#x3D; { 0, 1, 0, -1 };
+
+        var openSet &#x3D; new PriorityQueue&lt;(int i, int j), int&gt;(); &#x2F;&#x2F; Coada de priorități pentru parcurgerea pozițiilor
+        int rows &#x3D; matrice.GetLength(0);
+        int cols &#x3D; matrice.GetLength(1);
+        int[,] gScore &#x3D; new int[rows, cols];
+        int[,] fScore &#x3D; new int[rows, cols];
+
+        matrice[iStart, jStart] &#x3D; 1;  &#x2F;&#x2F; Marcăm poziția de start cu distanța 1
+        gScore[iStart, jStart] &#x3D; 0;
+        fScore[iStart, jStart] &#x3D; DistantaManhattan(iStart, jStart, iStop, jStop);
+        openSet.Enqueue((iStart, jStart), fScore[iStart, jStart]);
+
+        while (openSet.Count &gt; 0) {
+            var (iPoz, jPoz) &#x3D; openSet.Dequeue();
+
+            &#x2F;&#x2F; Verificăm fiecare dintre cei 4 vecini
+            for (int k &#x3D; 0; k &lt; 4; k++) {
+                int iVecin &#x3D; iPoz + di[k];
+                int jVecin &#x3D; jPoz + dj[k];
+
+                &#x2F;&#x2F; Dacă vecinul este în interiorul grilei și este liber (0)
+                if (iVecin &gt;&#x3D; 0 &amp;&amp; iVecin &lt; rows &amp;&amp; jVecin &gt;&#x3D; 0 &amp;&amp; jVecin &lt; cols &amp;&amp; matrice[iVecin, jVecin] &#x3D;&#x3D; 0) {
+                    matrice[iVecin, jVecin] &#x3D; matrice[iPoz, jPoz] + 1;  &#x2F;&#x2F; Incrementăm distanța
+
+                    &#x2F;&#x2F; Adăugăm vecinul în coadă pentru procesare ulterioară
+                    openSet.Enqueue((iVecin, jVecin), DistantaManhattan(iVecin, jVecin, iStop, jStop));
+
+                    &#x2F;&#x2F; Dacă am ajuns la destinație, putem opri căutarea
+                    if (iVecin &#x3D;&#x3D; iStop &amp;&amp; jVecin &#x3D;&#x3D; jStop)
+                        return;
+                }
+            }
+        }
+    }
+
+    static void Main() {
+        &#x2F;&#x2F; Reprezentarea labirintului: 0 &#x3D; liber, -1 &#x3D; obstacol
+        int[,] matrice &#x3D; {
+            { 0,  0,  0, -1, -1,  0,  0,  0, -1,  0},
+            {-1, -1,  0, -1,  0, -1,  0,  0,  0, -1},
+            {-1,  0,  0,  0,  0,  0,  0, -1, -1,  0},
+            {-1, -1, -1,  0, -1, -1, -1,  0, -1,  0},
+            {-1,  0,  0, -1, -1,  0, -1,  0,  0,  0},
+            {-1,  0,  0, -1, -1,  0,  0,  0,  0,  0}
+        };
+
+        int iStart &#x3D; 0, jStart &#x3D; 0; &#x2F;&#x2F; Coordonatele de start
+        int iStop &#x3D; 1, jStop &#x3D; 8;   &#x2F;&#x2F; Coordonatele de destinație
+
+        AStar(matrice, iStart, jStart, iStop, jStop);
+
+        &#x2F;&#x2F; Afișăm distanța până la destinație (sau valoare implicită dacă nu s-a ajuns)
+        Console.WriteLine(matrice[iStop, jStop]);
+    }
+}

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Algoritmi de găsire a drumului optim în matrici</title>
+        <link rel="icon" type="image" href="/icon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="cursorClasses.css" />
+
+        <link rel="stylesheet" href="prism/prism.css" />
+    </head>
+    <body>
+        <div id="sideMenu" class="side-menu">
+            <h2>Selecteaza algoritm</h2>
+            <div class="side-buttons">
+                <button id="bfsBtn" class="selected-alg-btn">BFS</button>
+                <button id="dfsBtn">DFS</button>
+                <button id="astarBtn">A* (A-Star)</button>
+            </div>
+        </div>
+        <h1 id="mainTitle">Title holder</h1>
+        <div id="holder">
+            <div id="visualizer">
+                <div class="tools">
+                    <button id="startSelector" class="active">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M2 18.2817C2 19.0484 2.82737 19.5299 3.49401 19.1511L18.0698 10.8695C18.7444 10.4861 18.7444 9.51387 18.0698 9.13054L3.49401 0.848867C2.82736 0.470093 2 0.95159 2 1.71833V18.2817Z"
+                                fill="#44444A"
+                            />
+                        </svg>
+                        <span class="tooltiptext"
+                            >Selectează poziția de start</span
+                        >
+                    </button>
+                    <button id="endSelector">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M2 20V2C2 1.44771 2.44772 1 3 1H18C18.5523 1 19 1.44772 19 2V11.5652C19 12.1175 18.5523 12.5652 18 12.5652H2"
+                                stroke="#44444A"
+                                stroke-miterlimit="10"
+                            />
+                            <path d="M19 1H16V4H19V1Z" fill="#44444A" />
+                            <path d="M16 9H13V12H16V9Z" fill="#44444A" />
+                            <path d="M16 4H13V7H16V4Z" fill="#44444A" />
+                            <path d="M10 9H8V12H10V9Z" fill="#44444A" />
+                            <path d="M10 4H8V7H10V4Z" fill="#44444A" />
+                            <path d="M5 9H2V12H5V9Z" fill="#44444A" />
+                            <path d="M5 4H2V7H5V4Z" fill="#44444A" />
+                            <path d="M19 7H16V9H19V7Z" fill="#44444A" />
+                            <path d="M13 7H10V9H13V7Z" fill="#44444A" />
+                            <path d="M8 7H5V9H8V7Z" fill="#44444A" />
+                            <path d="M13 1H10V4H13V1Z" fill="#44444A" />
+                            <path d="M8 1H5V4H8V1Z" fill="#44444A" />
+                        </svg>
+                        <span class="tooltiptext"
+                            >Selectează poziția de stop</span
+                        >
+                    </button>
+                    <button id="wallBuilder">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M18.6661 2.21477H18.6521H15.7718V6.71141H18.6521C19.3923 6.71141 20 6.09812 20 5.35799V3.52349C20 2.78336 19.4062 2.21477 18.6661 2.21477Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M1.39262 2.21477C0.652483 2.21477 0 2.78336 0 3.52349V5.35799C0 6.09812 0.652483 6.71141 1.39262 6.71141H4.22819V2.21477H1.39262Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M14.7651 2.21477H5.2349V6.71141H14.7651V2.21477Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M18.6661 13.2886H18.6521H15.7718V17.7852H18.6521C19.3923 17.7852 20 17.1719 20 16.4318V14.5973C20 13.8572 19.4062 13.2886 18.6661 13.2886Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M14.7651 13.2886H5.2349V17.7852H14.7651V13.2886Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M1.39262 13.2886C0.652483 13.2886 0 13.8572 0 14.5973V16.4318C0 17.1719 0.652483 17.7852 1.39262 17.7852H4.22819V13.2886H1.39262Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M1.39262 7.78524C0.652483 7.78524 0 8.32027 0 9.0604V10.8949C0 11.635 0.652483 12.2819 1.39262 12.2819H9.46309V7.78524H1.39262Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M18.6661 7.78524H18.6522H10.4698V12.2819H18.6522C19.3923 12.2819 20 11.635 20 10.8949V9.0604C20 8.32027 19.4062 7.78524 18.6661 7.78524Z"
+                                fill="#44444A"
+                            />
+                        </svg>
+                        <span class="tooltiptext">Adaugă pereți</span>
+                    </button>
+                    <button id="eraser">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M19.3498 4.71388L15.2319 0.596008C14.4373 -0.198669 12.9924 -0.198669 12.1977 0.596008L7.06844 5.72529L1.65019 11.1435C0.78327 12.0105 0.78327 13.3831 1.65019 14.1778L4.39544 16.923C4.53992 17.0675 4.68441 17.1397 4.90114 17.1397H9.6692C9.88593 17.1397 10.0304 17.0675 10.1749 16.923L19.3498 7.7481C20.2167 6.95342 20.2167 5.5808 19.3498 4.71388ZM9.38023 15.6949H5.26236L2.73384 13.1663C2.44487 12.8774 2.44487 12.4439 2.73384 12.1549L7.64639 7.2424L12.7757 12.3717L9.38023 15.6949Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M18.1217 18.5124H2.22814C1.79468 18.5124 1.5057 18.8013 1.5057 19.2348C1.5057 19.6683 1.79468 19.9572 2.22814 19.9572H18.1217C18.5551 19.9572 18.8441 19.6683 18.8441 19.2348C18.8441 18.8013 18.5551 18.5124 18.1217 18.5124Z"
+                                fill="#44444A"
+                            />
+                        </svg>
+                        <span class="tooltiptext">Șterge</span>
+                    </button>
+                </div>
+                <div id="grid"></div>
+                <div class="buttons-div">
+                    <button id="startButton">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M0.800003 18.2817C0.800003 19.0484 1.62737 19.5299 2.29401 19.1511L16.8698 10.8695C17.5444 10.4861 17.5444 9.51387 16.8698 9.13054L2.29401 0.848867C1.62737 0.470093 0.800003 0.95159 0.800003 1.71833V18.2817Z"
+                                fill="#44444A"
+                            />
+                        </svg>
+                        Start
+                    </button>
+                    <button id="generateMazeButton">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g clip-path="url(#clip0_21_27)">
+                                <rect
+                                    x="0.5"
+                                    y="0.5"
+                                    width="19"
+                                    height="19"
+                                    rx="1.5"
+                                    stroke="#44444A"
+                                />
+                                <rect
+                                    x="0.769231"
+                                    y="13.0769"
+                                    width="6.15385"
+                                    height="6.15385"
+                                    fill="#44444A"
+                                />
+                                <rect
+                                    x="6.92308"
+                                    y="6.92308"
+                                    width="6.15385"
+                                    height="6.15385"
+                                    fill="#44444A"
+                                />
+                                <rect
+                                    x="13.0769"
+                                    y="0.769234"
+                                    width="6.15385"
+                                    height="6.15385"
+                                    fill="#44444A"
+                                />
+                                <rect
+                                    x="13.0769"
+                                    y="13.0769"
+                                    width="6.15385"
+                                    height="6.15385"
+                                    fill="#44444A"
+                                />
+                                <rect
+                                    x="0.769231"
+                                    y="0.769234"
+                                    width="6.15385"
+                                    height="6.15385"
+                                    fill="#44444A"
+                                />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_21_27">
+                                    <rect width="20" height="20" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Generează labirint
+                    </button>
+                    <button id="clearAllButton">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M4.29629 19.0355C4.31886 19.5746 4.76245 20 5.30191 20H14.6982C15.2376 20 15.6812 19.5746 15.7038 19.0355L16.3748 4.87012H3.62527L4.29629 19.0355ZM12.1256 8.38855C12.1256 8.16284 12.3086 7.97977 12.5344 7.97977H13.1883C13.414 7.97977 13.5971 8.16279 13.5971 8.38855V16.4816C13.5971 16.7073 13.4141 16.8903 13.1883 16.8903H12.5344C12.3087 16.8903 12.1256 16.7074 12.1256 16.4816V8.38855ZM9.26433 8.38855C9.26433 8.16284 9.44735 7.97977 9.67311 7.97977H10.327C10.5527 7.97977 10.7358 8.16279 10.7358 8.38855V16.4816C10.7358 16.7073 10.5528 16.8903 10.327 16.8903H9.67311C9.44739 16.8903 9.26433 16.7074 9.26433 16.4816V8.38855ZM6.40296 8.38855C6.40296 8.16284 6.58598 7.97977 6.81174 7.97977H7.46567C7.69138 7.97977 7.87445 8.16279 7.87445 8.38855V16.4816C7.87445 16.7073 7.69143 16.8903 7.46567 16.8903H6.81174C6.58603 16.8903 6.40296 16.7074 6.40296 16.4816V8.38855Z"
+                                fill="#44444A"
+                            />
+                            <path
+                                d="M16.8216 1.0303H12.4868V0.21078C12.4868 0.094398 12.3924 0 12.276 0H7.724C7.60761 0 7.51326 0.094398 7.51326 0.21078V1.03025H3.1784C2.82954 1.03025 2.54679 1.31305 2.54679 1.66191V3.64617H17.4532V1.66195C17.4532 1.3131 17.1705 1.0303 16.8216 1.0303Z"
+                                fill="#44444A"
+                            />
+                        </svg>
+                        Șterge tot
+                    </button>
+                </div>
+                <div id="dialogue" class="info-box">
+                    <svg
+                        width="30"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="infoIcon"
+                    >
+                        <circle cx="15" cy="15" r="14" fill="#C7E0B8" />
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M11.2273 19.6969L23.2934 8L25 9.64996L11.2284 23L4 16.002L5.70537 14.3509L11.2273 19.6969Z"
+                            fill="#506549"
+                        />
+                    </svg>
+                    <svg
+                        width="30"
+                        height="30"
+                        viewBox="0 0 30 30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="warningIcon"
+                    >
+                        <circle cx="15" cy="15" r="14" fill="#E8B3AE" />
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M15.4999 14.005L22.5049 7L24 8.49503L16.9949 15.5L23.9999 22.5049L22.5049 24L15.4999 16.9951L8.49513 23.9997L7.00008 22.5048L14.0048 15.5L7 8.49524L8.49504 7.00021L15.4999 14.005Z"
+                            fill="#A1231E"
+                        />
+                    </svg>
+
+                    <div id="dialogueText" class="info-text">
+                        <p id="dialogueTitle">Cel mai scurt drum este de 14.</p>
+                        <p id="dialogueSubtitle">Cod executat în 140 pași.</p>
+                    </div>
+                </div>
+                <div id="hider">
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="endIcon"
+                    >
+                        <path
+                            d="M6 16.5V6C6 5.44772 6.44772 5 7 5H15C15.5523 5 16 5.44772 16 6V11C16 11.5523 15.5523 12 15 12H6"
+                            stroke="#44444a"
+                            stroke-miterlimit="10"
+                        />
+                        <path d="M16 5H14V7H16V5Z" fill="#44444a" />
+                        <path d="M14 10H12.5V12H14V10Z" fill="#44444a" />
+                        <path d="M14 7H12.5V8.5H14V7Z" fill="#44444a" />
+                        <path d="M11 10H9.5V12H11V10Z" fill="#44444a" />
+                        <path d="M11 7H9.5V8.5H11V7Z" fill="#44444a" />
+                        <path d="M8 10H6V12H8V10Z" fill="#44444a" />
+                        <path d="M8 7H6V8.5H8V7Z" fill="#44444a" />
+                        <path d="M16 8.5H14V10H16V8.5Z" fill="#44444a" />
+                        <path d="M12.5 8.5H11V10H12.5V8.5Z" fill="#44444a" />
+                        <path d="M9.5 8.5H8V10H9.5V8.5Z" fill="#44444a" />
+                        <path d="M12.5 5H11V7H12.5V5Z" fill="#44444a" />
+                        <path d="M9.5 5H8V7H9.5V5Z" fill="#44444a" />
+                    </svg>
+
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="startIcon"
+                    >
+                        <path
+                            d="M6 15.2768C6 16.0446 6.82948 16.526 7.49614 16.1451L14.9806 11.8682C15.6524 11.4843 15.6524 10.5157 14.9806 10.1318L7.49614 5.85494C6.82948 5.47399 6 5.95536 6 6.72318V15.2768Z"
+                            fill="#44444a"
+                        />
+                    </svg>
+                </div>
+            </div>
+            <div id="notes">
+                <h2>Info</h2>
+                <p id="algInfoText"></p>
+                <h2>Exemple de coduri</h2>
+                <div class="code-buttons">
+                    <button id="cpp" class="code-selector">C++</button>
+                    <button id="csharp" class="code-selector">C#</button>
+                    <button id="java" class="code-selector">Java</button>
+                    <button id="python" class="code-selector">Python</button>
+                </div>
+            </div>
+        </div>
+        <div id="codeHolderBg" class="codeHolderBgHidden">
+            <div id="codeHolder" class="codeHolder">
+                <div class="code-title-bar">
+                    <h2 id="codeTitle">Title</h2>
+                    <div class="button-group">
+                        <p id="copiedMsg" style="display: none">Copied!</p>
+                        <button id="copy">
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 22 22"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M17.9025 7.33333L12.8333 2.26417C12.7046 2.1352 12.5297 2.06267 12.3475 2.0625H10.0833C9.41482 2.0625 8.77359 2.32809 8.30085 2.80084C7.8281 3.27358 7.56251 3.91476 7.56251 4.58333V5.72917H6.41668C5.74811 5.72917 5.10693 5.99475 4.63418 6.46751C4.16143 6.94025 3.89584 7.58143 3.89584 8.25V17.4167C3.89584 18.0852 4.16143 18.7264 4.63418 19.1991C5.10693 19.6719 5.74811 19.9375 6.41668 19.9375H12.8333C13.5019 19.9375 14.1431 19.6719 14.6158 19.1991C15.0886 18.7264 15.3542 18.0852 15.3542 17.4167V16.2708H15.5833C16.2519 16.2708 16.8931 16.0053 17.3658 15.5325C17.8386 15.0597 18.1042 14.4185 18.1042 13.75V7.79167C18.0969 7.61897 18.025 7.45533 17.9025 7.33333ZM13.0625 4.40917L15.7575 7.10417H13.0625V4.40917ZM13.9792 17.4167C13.9792 17.7205 13.8585 18.012 13.6436 18.2269C13.4287 18.4418 13.1372 18.5625 12.8333 18.5625H6.41668C6.11278 18.5625 5.82134 18.4418 5.60645 18.2269C5.39157 18.012 5.27084 17.7205 5.27084 17.4167V8.25C5.27084 7.94611 5.39157 7.65466 5.60645 7.43978C5.82134 7.22489 6.11278 7.10417 6.41668 7.10417H7.56251V13.75C7.56251 14.4185 7.8281 15.0597 8.30085 15.5325C8.77359 16.0053 9.41482 16.2708 10.0833 16.2708H13.9792V17.4167ZM15.5833 14.8958H10.0833C9.77947 14.8958 9.48797 14.7751 9.2731 14.5602C9.05823 14.3454 8.93751 14.0539 8.93751 13.75V4.58333C8.93751 4.27944 9.05823 3.98799 9.2731 3.77311C9.48797 3.55822 9.77947 3.4375 10.0833 3.4375H11.6875V7.79167C11.6899 7.97327 11.763 8.14676 11.8915 8.27518C12.0199 8.4036 12.1934 8.47679 12.375 8.47917H16.7292V13.75C16.7292 14.0539 16.6085 14.3454 16.3936 14.5602C16.1787 14.7751 15.8872 14.8958 15.5833 14.8958Z"
+                                    fill="#44444A"
+                                />
+                            </svg>
+                        </button>
+                        <button id="download">
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M2.25 9.225V14.475C2.25 14.8728 2.40804 15.2544 2.68934 15.5357C2.97064 15.817 3.35218 15.975 3.75 15.975H14.25C14.6478 15.975 15.0294 15.817 15.3107 15.5357C15.592 15.2544 15.75 14.8728 15.75 14.475V9.225"
+                                    stroke="#44444A"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M5.925 9.225L9 12.225L12.075 9.225"
+                                    stroke="#44444A"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M9 2.025V10.65"
+                                    stroke="#44444A"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </button>
+                        <button id="exit">
+                            <svg
+                                width="15"
+                                height="15"
+                                viewBox="0 0 15 15"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M9.28046 7.5008L14.8517 1.92996C15.0495 1.73213 15.0495 1.41199 14.8517 1.21423L13.7869 0.149097C13.6921 0.0543323 13.5634 0.000976562 13.4291 0.000976562C13.2947 0.000976562 13.1661 0.0543323 13.0712 0.149097L7.50002 5.72036L1.92882 0.149097C1.83399 0.0543323 1.70531 0.000976562 1.57096 0.000976562C1.43664 0.000976562 1.30792 0.0543323 1.21313 0.149097L0.148388 1.21423C-0.0494422 1.41199 -0.0494422 1.73213 0.148388 1.92996L5.71959 7.50083L0.148941 13.071C-0.0487911 13.2689 -0.0487911 13.589 0.148941 13.7868L1.21374 14.8519C1.30851 14.9466 1.43723 15 1.57158 15C1.70593 15 1.83461 14.9466 1.92947 14.8519L7.49999 9.28127L13.0705 14.8519C13.1654 14.9466 13.2941 15 13.4284 15C13.5628 15 13.6915 14.9466 13.7862 14.8519L14.851 13.7868C15.0488 13.589 15.0488 13.2689 14.851 13.071L9.28046 7.5008Z"
+                                    fill="#44444A"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="preHolder">
+                    <pre
+                        id="code"
+                    ><code class="language-cpp line-numbers">some code</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <script src="main.js"></script>
+        <script src="buttons.js"></script>
+        <script src="gridStuff.js"></script>
+        <script src="dialogue.js"></script>
+        <script src="drawer.js"></script>
+        <script src="mazeGen.js"></script>
+        <script src="bfs.js"></script>
+        <script src="dfs.js"></script>
+        <script src="astar.js"></script>
+        <script src="codeHandler.js"></script>
+        <script src="sidebarStuff.js"></script>
+
+        <script src="prism/prism.js"></script>
+    </body>
+</html>

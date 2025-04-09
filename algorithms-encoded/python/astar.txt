@@ -1,0 +1,59 @@
+import heapq
+
+# Calculează distanța Manhattan dintre două puncte
+def distanta_manhattan(i_poz, j_poz, i_stop, j_stop):
+    return abs(i_poz - i_stop) + abs(j_poz - j_stop)
+
+# Funcția ASTAR pentru a găsi cel mai scurt drum într-un labirint
+def astar(matrice, i_start, j_start, i_stop, j_stop):
+    # Vectori de direcție: jos, dreapta, sus, stânga
+    di &#x3D; [1, 0, -1, 0]
+    dj &#x3D; [0, 1, 0, -1]
+
+    i_dim &#x3D; len(matrice)
+    j_dim &#x3D; len(matrice[0])
+
+    open_set &#x3D; []
+    heapq.heappush(open_set, (distanta_manhattan(i_start, j_start, i_stop, j_stop), i_start, j_start))
+
+    g_score &#x3D; [[0 for _ in range(j_dim)] for _ in range(i_dim)]
+    f_score &#x3D; [[0 for _ in range(j_dim)] for _ in range(i_dim)]
+
+    matrice[i_start][j_start] &#x3D; 1  # Marcăm poziția de start cu distanța 1
+
+    while open_set:
+        _, i_poz, j_poz &#x3D; heapq.heappop(open_set)
+
+        # Verificăm fiecare dintre cei 4 vecini
+        for k in range(4):
+            i_vecin &#x3D; i_poz + di[k]
+            j_vecin &#x3D; j_poz + dj[k]
+
+            # Dacă vecinul este în interiorul grilei și este liber (0)
+            if 0 &lt;&#x3D; i_vecin &lt; i_dim and 0 &lt;&#x3D; j_vecin &lt; j_dim and matrice[i_vecin][j_vecin] &#x3D;&#x3D; 0:
+                matrice[i_vecin][j_vecin] &#x3D; matrice[i_poz][j_poz] + 1  # Incrementăm distanța
+
+                # Adăugăm vecinul în coadă pentru procesare ulterioară
+                heapq.heappush(open_set, (distanta_manhattan(i_vecin, j_vecin, i_stop, j_stop), i_vecin, j_vecin))
+
+                # Dacă am ajuns la destinație, putem opri căutarea
+                if i_vecin &#x3D;&#x3D; i_stop and j_vecin &#x3D;&#x3D; j_stop:
+                    return
+
+# Reprezentarea labirintului: 0 &#x3D; liber, -1 &#x3D; obstacol
+matrice &#x3D; [
+    [ 0,  0,  0, -1, -1,  0,  0,  0, -1,  0],
+    [-1, -1,  0, -1,  0, -1,  0,  0,  0, -1],
+    [-1,  0,  0,  0,  0,  0,  0, -1, -1,  0],
+    [-1, -1, -1,  0, -1, -1, -1,  0, -1,  0],
+    [-1,  0,  0, -1, -1,  0, -1,  0,  0,  0],
+    [-1,  0,  0, -1, -1,  0,  0,  0,  0,  0]
+]
+
+i_start, j_start &#x3D; 0, 0  # Coordonatele de start
+i_stop, j_stop &#x3D; 1, 8    # Coordonatele de destinație
+
+astar(matrice, i_start, j_start, i_stop, j_stop)
+
+# Afișăm distanța până la destinație (sau valoare implicită dacă nu s-a ajuns)
+print(matrice[i_stop][j_stop])
