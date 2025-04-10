@@ -82,8 +82,8 @@ După execuția unui algoritm, este generat un div care conține:
 ├── algorithms-encoded/
 │   └── [limbaj]/[algoritm].txt
 ├── prism/
-|   ├── prism.js
-|   └── prism.css
+│   ├── prism.js
+│   └── prism.css
 ```
 
 ## 🔗 Demo live
